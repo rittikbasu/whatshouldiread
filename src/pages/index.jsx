@@ -2,30 +2,53 @@ import React, { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import Marquee from "react-fast-marquee";
 
-export default function Home({ bookmarksTitle }) {
-  console.log(bookmarksTitle);
+export default function Home({ bookmarksTitle, bookmarks }) {
+  const [data, setData] = useState([...bookmarks]);
   const [randomBookmark, setRandomBookmark] = useState({
     title: null,
     url: null,
+    id: 0,
   });
+  const [readCheckbox, setReadCheckbox] = useState(false);
+  const [bookmarksData, setBookmarksData] = useState([...data]);
 
-  const handleFetchRandomBookmark = async () => {
-    try {
-      const response = await fetch("/api/getRandomBookmark");
-      const link = await response.json();
-      console.log("Random bookmark:", link);
-      setRandomBookmark({ title: link.title, url: link.url });
-    } catch (error) {
-      console.error("Error fetching random bookmark:", error);
+  function getRandomBookmark() {
+    const randomIndex = Math.floor(Math.random() * bookmarksData.length);
+    const bookmark = bookmarksData[randomIndex];
+    bookmarksData.splice(randomIndex, 1);
+    setRandomBookmark({
+      title: bookmark.title,
+      url: bookmark.url,
+      id: bookmark.id,
+    });
+    setBookmarksData(bookmarksData);
+
+    if (bookmarksData.length === 0) {
+      setBookmarksData([...data]);
     }
-  };
+  }
+
+  function handleReadCheckbox(e) {
+    setReadCheckbox(e.target.checked);
+
+    setTimeout(() => {
+      if (e.target.checked) {
+        const filteredBookmarks = data.filter(
+          (bookmark) => bookmark.id !== randomBookmark.id
+        );
+        setData(filteredBookmarks);
+      }
+      getRandomBookmark();
+      setReadCheckbox(false);
+    }, 500);
+  }
 
   return (
     <div className="h-screen overflow-hidden">
       <div className="flex flex-col items-center h-full justify-center bg-zinc-900/90 gap-y-8 lg:gap-y-12">
         <button
           className="group relative mx-auto inline-flex -mt-16 items-center overflow-hidden rounded-full bg-zinc-800 px-8 py-3 transition"
-          onClick={handleFetchRandomBookmark}
+          onClick={getRandomBookmark}
         >
           <div className="absolute inset-0 flex items-center [container-type:inline-size]">
             <div className="absolute h-[100cqw] w-[100cqw] animate-spin bg-[conic-gradient(from_0_at_50%_50%,rgba(236,72,153,0.3)_0deg,transparent_60deg,transparent_300deg,rgba(236,72,153,0.3)_360deg)] transition duration-300 [animation-duration:3s] opacity-100"></div>
@@ -54,7 +77,7 @@ export default function Home({ bookmarksTitle }) {
 
             <div className="flex items-center justify-center mb-4">
               <label
-                for="read-checkbox"
+                htmlFor="read-checkbox"
                 className="mr-2 text-sm lg:text-base tracking-widest text-zinc-400"
               >
                 Already Read
@@ -62,7 +85,8 @@ export default function Home({ bookmarksTitle }) {
               <input
                 id="read-checkbox"
                 type="checkbox"
-                // checked={false}
+                checked={readCheckbox}
+                onChange={handleReadCheckbox}
                 className="w-4 h-4 appearance-none checked:bg-pink-500/60 checked:border-0 rounded accent-pink-500 bg-zinc-600"
               />
             </div>
@@ -86,16 +110,19 @@ export async function getStaticProps() {
   const supabase = createClient(supabaseUrl, supabaseApiKey);
 
   let bookmarksTitle = "";
+  let bookmarks = [];
 
   await supabase
     .from("bookmarks")
-    .select("title")
+    .select()
+    .eq("read", false)
     .then(({ data, error }) => {
       if (error) {
         console.error("Error fetching bookmarks:", error);
       } else if (data && data.length > 0) {
         // Concatenate all bookmark titles into a single string
         bookmarksTitle = data.map((bookmark) => bookmark.title).join(" • ");
+        bookmarks = data.sort(() => Math.random() - 0.5);
       }
     })
     .catch((error) => {
@@ -105,6 +132,7 @@ export async function getStaticProps() {
   return {
     props: {
       bookmarksTitle,
+      bookmarks,
     },
   };
 }
