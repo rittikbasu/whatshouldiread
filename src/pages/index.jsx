@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Head from "next/head";
 import { createClient } from "@supabase/supabase-js";
 import Marquee from "react-fast-marquee";
 
@@ -57,6 +58,9 @@ export default function Home({ bookmarksTitle, bookmarks }) {
 
   return (
     <div className="h-screen overflow-hidden">
+      <Head>
+        <title>what should i read?</title>
+      </Head>
       <div className="flex flex-col items-center h-full justify-center bg-zinc-900/90 gap-y-8 lg:gap-y-12">
         {data.length !== 0 && (
           <button
