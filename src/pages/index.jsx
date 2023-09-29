@@ -60,6 +60,22 @@ export default function Home({ bookmarksTitle, bookmarks }) {
     <div className="h-screen overflow-hidden">
       <Head>
         <title>what should i read?</title>
+        {/* og image */}
+        <meta property="og:title" content="what should i read?" />
+        <meta
+          property="og:description"
+          content="a random bookmark from my reading list"
+        />
+        <meta property="og:image" content="/og.png" />
+        <meta property="og:url" content="https://whatshouldiread.rittik.io" />
+        {/* twitter card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="what should i read?" />
+        <meta
+          name="twitter:description"
+          content="a random bookmark from my reading list"
+        />
+        <meta name="twitter:image" content="/og.png" />
       </Head>
       <div className="flex flex-col items-center h-full justify-center bg-zinc-900/90 gap-y-8 lg:gap-y-12">
         {data.length !== 0 && (
