@@ -60,7 +60,6 @@ export default function Home({ bookmarksTitle, bookmarks }) {
     <div className="h-screen overflow-hidden">
       <Head>
         <title>what should i read?</title>
-        {/* og image */}
         <meta property="og:title" content="what should i read?" />
         <meta
           property="og:description"
@@ -68,7 +67,6 @@ export default function Home({ bookmarksTitle, bookmarks }) {
         />
         <meta property="og:image" content="/og.png" />
         <meta property="og:url" content="https://whatshouldiread.rittik.io" />
-        {/* twitter card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="what should i read?" />
         <meta
@@ -91,7 +89,7 @@ export default function Home({ bookmarksTitle, bookmarks }) {
 
             <div className="absolute bottom-0 left-1/2 w-4/5 -translate-x-1/2 rounded-full bg-white/10 blur-md transition-all duration-500 h-2/3 opacity-100"></div>
 
-            <span className="font-mono relative mt-px bg-gradient-to-b from-white/25 to-white bg-clip-text text-lg lg:text-2xl font-medium text-transparent transition-all duration-200">
+            <span className="font-mono relative mt-px bg-gradient-to-b from-white/25 to-white group-hover:from-pink-900/10 group-hover:to-pink-300 bg-clip-text text-lg lg:text-2xl font-medium text-transparent transition-all duration-200">
               {" "}
               what should i read?{" "}
             </span>
@@ -103,7 +101,7 @@ export default function Home({ bookmarksTitle, bookmarks }) {
               href={randomBookmark.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-zinc-500 underline underline-offset-4 lg:text-2xl tracking-wider decoration-pink-500/60"
+              className="text-zinc-500 underline hover:decoration-pink-400/80 underline-offset-4 lg:text-2xl tracking-wider decoration-pink-500/60"
             >
               {randomBookmark.title}
             </a>
@@ -121,7 +119,7 @@ export default function Home({ bookmarksTitle, bookmarks }) {
                 checked={readCheckbox}
                 onChange={handleReadCheckbox}
                 disabled={readCheckbox}
-                className="w-4 h-4 appearance-none checked:bg-pink-500/60 checked:border-0 rounded accent-pink-500 bg-zinc-600"
+                className="w-4 h-4 appearance-none cursor-pointer checked:bg-pink-500/60 checked:border-0 rounded accent-pink-500 bg-zinc-600"
               />
             </div>
           </div>
@@ -156,7 +154,7 @@ export async function getStaticProps() {
 
   await supabase
     .from("bookmarks")
-    .select()
+    .select("id, title, url")
     .eq("read", false)
     .then(({ data, error }) => {
       if (error) {
