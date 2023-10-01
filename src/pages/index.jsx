@@ -60,6 +60,10 @@ export default function Home({ bookmarksTitle, bookmarks }) {
     <div className="h-screen overflow-hidden">
       <Head>
         <title>what should i read?</title>
+        <meta
+          property="description"
+          content="a random bookmark from my reading list"
+        />
         <meta property="og:title" content="what should i read?" />
         <meta
           property="og:description"
