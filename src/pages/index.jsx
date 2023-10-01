@@ -69,7 +69,10 @@ export default function Home({ bookmarksTitle, bookmarks }) {
           property="og:description"
           content="a random bookmark from my reading list"
         />
-        <meta property="og:image" content="/og.png" />
+        <meta
+          property="og:image"
+          content="https://whatshouldiread.rittik.io/og.png"
+        />
         <meta property="og:url" content="https://whatshouldiread.rittik.io" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="what should i read?" />
@@ -77,7 +80,10 @@ export default function Home({ bookmarksTitle, bookmarks }) {
           name="twitter:description"
           content="a random bookmark from my reading list"
         />
-        <meta name="twitter:image" content="/og.png" />
+        <meta
+          name="twitter:image"
+          content="https://whatshouldiread.rittik.io/og.png"
+        />
       </Head>
       <div className="flex flex-col items-center h-full justify-center bg-zinc-900/90 gap-y-8 lg:gap-y-12">
         {data.length !== 0 && (
